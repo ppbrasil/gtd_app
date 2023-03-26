@@ -88,6 +88,6 @@ class _TaskDetailsPageState extends State<TaskDetailsPage> {
     final provider = context.read<TaskProvider>();
     await provider.disableTask(widget.task);
     Navigator.of(context).pop();
-    Provider.of<TaskProvider>(context, listen: false).fetchTasks();
+    // Provider.of<TaskProvider>(context, listen: false).fetchTasks();
   }
 }

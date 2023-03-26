@@ -57,7 +57,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
   void _createTask() async {
     if (_formKey.currentState!.validate()) {
       final newTitle = _titleController.text.trim();
-      final newTask = Task(title: newTitle);
+      final newTask = Task(title: newTitle, isDone: true);
       final provider = context.read<TaskProvider>();
       await provider.createTask(newTask);
       Navigator.of(context)
