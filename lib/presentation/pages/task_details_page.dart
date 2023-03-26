@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gtd_app/core/entities/task.dart';
 import 'package:gtd_app/presentation/providers/task_provider.dart';
+import 'package:gtd_app/presentation/widgets/task_form.dart';
 import 'package:provider/provider.dart';
-import 'package:gtd_app/data/datasources/task_remote_data_source.dart';
 
 class TaskDetailsPage extends StatefulWidget {
   final Task task;
@@ -37,28 +37,10 @@ class _TaskDetailsPageState extends State<TaskDetailsPage> {
       ),
       body: Column(
         children: [
-          Form(
-            key: _formKey,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: TextFormField(
-                controller: _titleController,
-                maxLength: 50,
-                keyboardType: TextInputType.text,
-                textInputAction: TextInputAction.done,
-                onEditingComplete: _updateTaskTitle,
-                decoration: const InputDecoration(
-                  labelText: 'Task Title',
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Title can\'t be empty';
-                  }
-                  return null;
-                },
-                onChanged: (value) {},
-              ),
-            ),
+          TaskForm(
+            formKey: _formKey,
+            titleController: _titleController,
+            onSubmit: _updateTaskTitle,
           ),
           ElevatedButton(
             onPressed: _deleteTask,
@@ -88,6 +70,5 @@ class _TaskDetailsPageState extends State<TaskDetailsPage> {
     final provider = context.read<TaskProvider>();
     await provider.disableTask(widget.task);
     Navigator.of(context).pop();
-    // Provider.of<TaskProvider>(context, listen: false).fetchTasks();
   }
 }

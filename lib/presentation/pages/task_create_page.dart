@@ -1,7 +1,9 @@
+// CreateTaskPage
 import 'package:flutter/material.dart';
 import 'package:gtd_app/core/entities/task.dart';
 import 'package:gtd_app/presentation/providers/task_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:gtd_app/presentation/widgets/task_form.dart';
 
 class CreateTaskPage extends StatefulWidget {
   @override
@@ -24,28 +26,10 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
       appBar: AppBar(
         title: Text('Create Task'),
       ),
-      body: Form(
-        key: _formKey,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: TextFormField(
-            controller: _titleController,
-            maxLength: 50,
-            keyboardType: TextInputType.text,
-            textInputAction: TextInputAction.done,
-            onEditingComplete: _createTask,
-            decoration: const InputDecoration(
-              labelText: 'Task Title',
-            ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Title can\'t be empty';
-              }
-              return null;
-            },
-            onChanged: (value) {},
-          ),
-        ),
+      body: TaskForm(
+        formKey: _formKey,
+        titleController: _titleController,
+        onEditingComplete: _createTask,
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _createTask,
@@ -57,7 +41,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
   void _createTask() async {
     if (_formKey.currentState!.validate()) {
       final newTitle = _titleController.text.trim();
-      final newTask = Task(title: newTitle, isDone: true);
+      final newTask = Task(title: newTitle, isDone: false);
       final provider = context.read<TaskProvider>();
       await provider.createTask(newTask);
       Navigator.of(context)
