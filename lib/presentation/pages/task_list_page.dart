@@ -1,29 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:gtd_app/presentation/pages/task_create_page.dart';
+import 'package:gtd_app/presentation/providers/task_form_provider.dart';
 import 'package:gtd_app/presentation/providers/task_provider.dart';
 import 'package:gtd_app/presentation/widgets/task_item.dart';
 import 'package:provider/provider.dart';
 
-class TaskListPage extends StatelessWidget {
+class TaskListPage extends StatefulWidget {
+  @override
+  _TaskListPageState createState() => _TaskListPageState();
+}
+
+class _TaskListPageState extends State<TaskListPage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      Provider.of<TaskProvider>(context, listen: false).fetchTasks();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Tasks'),
       ),
-      body: FutureBuilder(
-        future: Provider.of<TaskProvider>(context, listen: false).fetchTasks(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return Consumer<TaskProvider>(
-              builder: (context, taskProvider, child) {
-                return ListView.builder(
-                  itemCount: taskProvider.tasks.length,
-                  itemBuilder: (context, index) {
-                    final task = taskProvider.tasks[index];
-                    return TaskItem(task: task);
-                  },
-                );
+      body: Consumer<TaskProvider>(
+        builder: (context, taskProvider, child) {
+          if (taskProvider.tasks.isNotEmpty) {
+            return ListView.builder(
+              itemCount: taskProvider.tasks.length,
+              itemBuilder: (context, index) {
+                final task = taskProvider.tasks[index];
+                return TaskItem(task: task);
               },
             );
           } else {
@@ -37,7 +46,13 @@ class TaskListPage extends StatelessWidget {
           final result = await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => CreateTaskPage(),
+              builder: (context) => ChangeNotifierProvider(
+                create: (context) => TaskFormProvider(
+                  taskProvider:
+                      Provider.of<TaskProvider>(context, listen: false),
+                ),
+                child: const TaskCreatePage(),
+              ),
             ),
           );
 

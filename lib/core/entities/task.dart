@@ -1,12 +1,12 @@
 class Task {
   final int? id;
   final String title;
-  final bool? isDone;
+  final bool isDone;
 
   Task({
-    this.id = 0,
+    this.id,
     required this.title,
-    this.isDone,
+    this.isDone = false,
   });
 
   Task copyWith({
@@ -28,7 +28,6 @@ class Task {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
       'name': title,
       'done': isDone,
     };

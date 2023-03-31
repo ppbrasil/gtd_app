@@ -1,74 +1,71 @@
 import 'package:flutter/material.dart';
 import 'package:gtd_app/core/entities/task.dart';
-import 'package:gtd_app/presentation/providers/task_provider.dart';
-import 'package:gtd_app/presentation/widgets/task_form.dart';
+import 'package:gtd_app/presentation/widgets/task_is_done_check_box.dart';
+import 'package:gtd_app/presentation/widgets/task_title.dart';
 import 'package:provider/provider.dart';
+import 'package:gtd_app/presentation/providers/task_form_provider.dart';
 
 class TaskDetailsPage extends StatefulWidget {
-  final Task task;
+  static const String routeName = '/task-details';
 
-  const TaskDetailsPage({Key? key, required this.task}) : super(key: key);
+  const TaskDetailsPage({Key? key}) : super(key: key);
 
   @override
-  _TaskDetailsPageState createState() => _TaskDetailsPageState();
+  State<TaskDetailsPage> createState() => _TaskDetailsPageState();
 }
 
 class _TaskDetailsPageState extends State<TaskDetailsPage> {
-  final _formKey = GlobalKey<FormState>();
-  late TextEditingController _titleController;
+  late FocusNode _focusNode;
 
   @override
   void initState() {
     super.initState();
-    _titleController = TextEditingController(text: widget.task.title);
+    _focusNode = FocusNode();
   }
 
   @override
   void dispose() {
-    _titleController.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.task.title),
-      ),
-      body: Column(
-        children: [
-          TaskForm(
-            formKey: _formKey,
-            titleController: _titleController,
-            onSubmit: _updateTaskTitle,
+    final taskFormProvider = Provider.of<TaskFormProvider>(context);
+    final task = Task(
+        title: taskFormProvider.title ?? '',
+        isDone: taskFormProvider.isDone,
+        id: taskFormProvider.id);
+
+    return WillPopScope(
+      onWillPop: () async {
+        FocusScope.of(context).unfocus();
+        await Future.delayed(const Duration(milliseconds: 1000));
+        return true;
+      },
+      child: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text('Task Details'),
           ),
-          ElevatedButton(
-            onPressed: _deleteTask,
-            style: ElevatedButton.styleFrom(
-              primary: Colors.red,
-              onPrimary: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          body: Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TaskTitle(task: task, focusNode: _focusNode),
+                const SizedBox(height: 16.0),
+                const Text('Task is done'),
+                TaskIsDoneCheckBox(value: taskFormProvider.isDone, task: task),
+              ],
             ),
-            child: const Text('Delete'),
           ),
-        ],
+        ),
       ),
     );
-  }
-
-  void _updateTaskTitle() async {
-    if (_formKey.currentState!.validate()) {
-      final newTitle = _titleController.text.trim();
-      final updatedTask = widget.task.copyWith(title: newTitle);
-      final provider = context.read<TaskProvider>();
-      await provider.updateTask(updatedTask);
-      Navigator.of(context).pop();
-    }
-  }
-
-  void _deleteTask() async {
-    final provider = context.read<TaskProvider>();
-    await provider.disableTask(widget.task);
-    Navigator.of(context).pop();
   }
 }

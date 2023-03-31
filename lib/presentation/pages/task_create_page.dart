@@ -1,51 +1,81 @@
-// CreateTaskPage
 import 'package:flutter/material.dart';
 import 'package:gtd_app/core/entities/task.dart';
-import 'package:gtd_app/presentation/providers/task_provider.dart';
+import 'package:gtd_app/presentation/widgets/task_is_done_check_box.dart';
+import 'package:gtd_app/presentation/widgets/task_title.dart';
 import 'package:provider/provider.dart';
-import 'package:gtd_app/presentation/widgets/task_form.dart';
+import 'package:gtd_app/presentation/providers/task_form_provider.dart';
 
-class CreateTaskPage extends StatefulWidget {
+class TaskCreatePage extends StatefulWidget {
+  static const String routeName = '/task-create';
+
+  const TaskCreatePage({Key? key}) : super(key: key);
+
   @override
-  _CreateTaskPageState createState() => _CreateTaskPageState();
+  State<TaskCreatePage> createState() => _TaskCreatePageState();
 }
 
-class _CreateTaskPageState extends State<CreateTaskPage> {
-  final _formKey = GlobalKey<FormState>();
-  final TextEditingController _titleController = TextEditingController();
+class _TaskCreatePageState extends State<TaskCreatePage> {
+  late FocusNode _focusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode = FocusNode();
+  }
 
   @override
   void dispose() {
-    _titleController.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Create Task'),
-      ),
-      body: TaskForm(
-        formKey: _formKey,
-        titleController: _titleController,
-        onEditingComplete: _createTask,
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _createTask,
-        child: Icon(Icons.check),
+    final taskFormProvider = Provider.of<TaskFormProvider>(context);
+
+    void _submitTask() async {
+      await taskFormProvider.createTask(Task(
+          title: taskFormProvider.title!,
+          isDone: taskFormProvider.isDone,
+          id: null));
+      Navigator.pop(context);
+    }
+
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Create Task'),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TaskTitle(
+                  task: Task(
+                      title: taskFormProvider.title ?? '',
+                      isDone: taskFormProvider.isDone,
+                      id: null),
+                  focusNode: _focusNode),
+              const SizedBox(height: 16.0),
+              const Text('Task is done'),
+              TaskIsDoneCheckBox(
+                  value: taskFormProvider.isDone,
+                  task: Task(
+                      title: taskFormProvider.title ?? '',
+                      isDone: taskFormProvider.isDone,
+                      id: null)),
+            ],
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: _submitTask,
+          child: const Icon(Icons.check),
+        ),
       ),
     );
-  }
-
-  void _createTask() async {
-    if (_formKey.currentState!.validate()) {
-      final newTitle = _titleController.text.trim();
-      final newTask = Task(title: newTitle, isDone: false);
-      final provider = context.read<TaskProvider>();
-      await provider.createTask(newTask);
-      Navigator.of(context)
-          .pop(true); // Return 'true' to indicate a new task was created
-    }
   }
 }

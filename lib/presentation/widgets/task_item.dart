@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 class TaskItem extends StatelessWidget {
   final Task task;
 
-  const TaskItem({super.key, required this.task});
+  const TaskItem({Key? key, required this.task}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +24,10 @@ class TaskItem extends StatelessWidget {
         ),
         title: Text(task.title),
         onTap: () {
-          Navigator.push(
+          Navigator.pushNamed(
             context,
-            MaterialPageRoute(
-              builder: (context) => TaskDetailsPage(task: task),
-            ),
+            TaskDetailsPage.routeName,
+            arguments: task,
           ).then((_) {
             Provider.of<TaskProvider>(context, listen: false).fetchTasks();
           });
