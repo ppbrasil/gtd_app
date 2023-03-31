@@ -63,12 +63,12 @@ class _TaskCreatePageState extends State<TaskCreatePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TaskTitle(
-                  task: Task(
-                      title: taskFormProvider.title ?? '',
-                      isDone: taskFormProvider.isDone,
-                      id: null),
-                  setIsLoading: _setIsLoading,
-                  focusNode: _focusNode),
+                task: Task(
+                    title: taskFormProvider.title ?? '',
+                    isDone: taskFormProvider.isDone,
+                    id: null),
+                setIsLoading: _setIsLoading,
+              ),
               const SizedBox(height: 16.0),
               const Text('Task is done'),
               TaskIsDoneCheckBox(
