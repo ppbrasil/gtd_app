@@ -58,13 +58,13 @@ class TaskFormProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // void updateReadiness(Readiness newReadiness, Task task) {
-  //   // _readiness = newReadiness;
-  //   if (task.id != null) {
-  //     _taskProvider.updateTask(task.copyWith(readiness: newReadiness));
-  //   }
-  //   notifyListeners();
-  // }
+  void updateReadiness(Readiness newReadiness, Task task) {
+    // _readiness = newReadiness;
+    if (task.id != null) {
+      _taskProvider.updateTask(task.copyWith(readiness: newReadiness));
+    }
+    notifyListeners();
+  }
 
   Future<void> createTask(Task task) async {
     if (_title != null && _title!.isNotEmpty) {

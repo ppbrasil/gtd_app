@@ -68,7 +68,10 @@ class _TaskDetailsPageState extends State<TaskDetailsPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TaskTitle(task: task, setIsLoading: _setIsLoading),
+                TaskTitle(
+                  task: task,
+                  setIsLoading: _setIsLoading,
+                ),
                 const SizedBox(height: 16.0),
                 const Text('Task is done'),
                 TaskIsDoneCheckBox(
@@ -80,11 +83,10 @@ class _TaskDetailsPageState extends State<TaskDetailsPage> {
                   value: taskFormProvider.isFocus,
                   task: task,
                 ),
-                // TaskReadinessDropdown(
-                //   task: task,
-                //   focusNode: _focusNode,
-                //   setIsLoading: _setIsLoading,
-                // ),
+                TaskReadinessDropdown(
+                  task: task,
+                  setIsLoading: _setIsLoading,
+                ),
               ],
             ),
           ),
