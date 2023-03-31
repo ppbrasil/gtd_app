@@ -16,6 +16,7 @@ class TaskDetailsPage extends StatefulWidget {
 
 class _TaskDetailsPageState extends State<TaskDetailsPage> {
   late FocusNode _focusNode;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -29,6 +30,12 @@ class _TaskDetailsPageState extends State<TaskDetailsPage> {
     super.dispose();
   }
 
+  void _setIsLoading(bool value) {
+    setState(() {
+      _isLoading = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final taskFormProvider = Provider.of<TaskFormProvider>(context);
@@ -40,7 +47,9 @@ class _TaskDetailsPageState extends State<TaskDetailsPage> {
     return WillPopScope(
       onWillPop: () async {
         FocusScope.of(context).unfocus();
-        await Future.delayed(const Duration(milliseconds: 1000));
+        while (_isLoading) {
+          await Future.delayed(const Duration(milliseconds: 10));
+        }
         return true;
       },
       child: GestureDetector(
@@ -57,7 +66,10 @@ class _TaskDetailsPageState extends State<TaskDetailsPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TaskTitle(task: task, focusNode: _focusNode),
+                TaskTitle(
+                    task: task,
+                    focusNode: _focusNode,
+                    setIsLoading: _setIsLoading),
                 const SizedBox(height: 16.0),
                 const Text('Task is done'),
                 TaskIsDoneCheckBox(value: taskFormProvider.isDone, task: task),

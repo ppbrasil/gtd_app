@@ -16,6 +16,7 @@ class TaskCreatePage extends StatefulWidget {
 
 class _TaskCreatePageState extends State<TaskCreatePage> {
   late FocusNode _focusNode;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -27,6 +28,12 @@ class _TaskCreatePageState extends State<TaskCreatePage> {
   void dispose() {
     _focusNode.dispose();
     super.dispose();
+  }
+
+  void _setIsLoading(bool value) {
+    setState(() {
+      _isLoading = value;
+    });
   }
 
   @override
@@ -59,6 +66,7 @@ class _TaskCreatePageState extends State<TaskCreatePage> {
                       title: taskFormProvider.title ?? '',
                       isDone: taskFormProvider.isDone,
                       id: null),
+                  setIsLoading: _setIsLoading,
                   focusNode: _focusNode),
               const SizedBox(height: 16.0),
               const Text('Task is done'),

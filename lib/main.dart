@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
         title: 'Task Management App',
         initialRoute: '/task-list',
         routes: {
-          '/task-list': (context) => TaskListPage(),
+          '/task-list': (context) => const TaskListPage(),
           TaskDetailsPage.routeName: (context) {
             final Task task =
                 ModalRoute.of(context)!.settings.arguments as Task;

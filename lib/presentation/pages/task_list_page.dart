@@ -6,8 +6,10 @@ import 'package:gtd_app/presentation/widgets/task_item.dart';
 import 'package:provider/provider.dart';
 
 class TaskListPage extends StatefulWidget {
+  const TaskListPage({super.key});
+
   @override
-  _TaskListPageState createState() => _TaskListPageState();
+  State<TaskListPage> createState() => _TaskListPageState();
 }
 
 class _TaskListPageState extends State<TaskListPage> {
