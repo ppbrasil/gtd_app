@@ -8,18 +8,21 @@ class TaskFormProvider extends ChangeNotifier {
   final TaskProvider _taskProvider;
   String? _title;
   bool _isDone = false;
+  bool _isFocus = false;
   int? _id;
 
   TaskFormProvider({required TaskProvider taskProvider, Task? task})
       : _taskProvider = taskProvider {
-    task ??= Task(title: '', id: null, isDone: false);
+    task ??= Task(title: '', id: null, isDone: false, isFocus: false);
     _title = task.title;
     _isDone = task.isDone;
+    _isFocus = task.isFocus;
     _id = task.id;
   }
 
   String? get title => _title;
   bool get isDone => _isDone;
+  bool get isFocus => _isFocus;
   int? get id => _id;
 
   Future<void> updateTitle(String newTitle, Task task) async {
@@ -34,6 +37,14 @@ class TaskFormProvider extends ChangeNotifier {
     _isDone = newIsDone;
     if (task.id != null) {
       _taskProvider.updateTask(task.copyWith(isDone: newIsDone));
+    }
+    notifyListeners();
+  }
+
+  void updateIsFocus(bool newIsFocus, Task task) {
+    _isFocus = newIsFocus;
+    if (task.id != null) {
+      _taskProvider.updateTask(task.copyWith(isFocus: newIsFocus));
     }
     notifyListeners();
   }

@@ -3,18 +3,18 @@ import 'package:gtd_app/core/entities/task.dart';
 import 'package:provider/provider.dart';
 import 'package:gtd_app/presentation/providers/task_form_provider.dart';
 
-class TaskIsDoneCheckBox extends StatefulWidget {
+class TaskIsFocusCheckBox extends StatefulWidget {
   final bool value;
   final Task task;
 
-  const TaskIsDoneCheckBox(
+  const TaskIsFocusCheckBox(
       {super.key, required this.value, required this.task});
 
   @override
-  State<TaskIsDoneCheckBox> createState() => _TaskIsDoneCheckBoxState();
+  State<TaskIsFocusCheckBox> createState() => _TaskIsDoneCheckBoxState();
 }
 
-class _TaskIsDoneCheckBoxState extends State<TaskIsDoneCheckBox> {
+class _TaskIsDoneCheckBoxState extends State<TaskIsFocusCheckBox> {
   late bool _value;
 
   @override
@@ -30,7 +30,7 @@ class _TaskIsDoneCheckBoxState extends State<TaskIsDoneCheckBox> {
       });
       final taskFormProvider =
           Provider.of<TaskFormProvider>(context, listen: false);
-      taskFormProvider.updateIsDone(newValue, widget.task);
+      taskFormProvider.updateIsFocus(newValue, widget.task);
     }
   }
 
@@ -39,6 +39,8 @@ class _TaskIsDoneCheckBoxState extends State<TaskIsDoneCheckBox> {
     return Checkbox(
       value: _value,
       onChanged: _onChanged,
+      checkColor: Colors.yellowAccent,
+      activeColor: Colors.yellow,
     );
   }
 }

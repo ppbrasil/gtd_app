@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gtd_app/core/entities/task.dart';
 import 'package:gtd_app/presentation/widgets/task_is_done_check_box.dart';
+import 'package:gtd_app/presentation/widgets/task_is_focus_check_box.dart';
 import 'package:gtd_app/presentation/widgets/task_title.dart';
 import 'package:provider/provider.dart';
 import 'package:gtd_app/presentation/providers/task_form_provider.dart';
@@ -75,6 +76,12 @@ class _TaskCreatePageState extends State<TaskCreatePage> {
                   task: Task(
                       title: taskFormProvider.title ?? '',
                       isDone: taskFormProvider.isDone,
+                      id: null)),
+              TaskIsFocusCheckBox(
+                  value: taskFormProvider.isDone,
+                  task: Task(
+                      title: taskFormProvider.title ?? '',
+                      isDone: taskFormProvider.isFocus,
                       id: null)),
             ],
           ),

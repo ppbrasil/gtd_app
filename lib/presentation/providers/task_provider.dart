@@ -29,7 +29,6 @@ class TaskProvider with ChangeNotifier {
       _tasks.add(newTask);
       notifyListeners();
     } catch (e) {
-      print('Error creating task: $e');
       throw Exception('Failed to create task');
     }
   }

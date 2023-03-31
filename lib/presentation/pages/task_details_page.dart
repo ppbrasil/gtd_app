@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gtd_app/core/entities/task.dart';
 import 'package:gtd_app/presentation/widgets/task_is_done_check_box.dart';
+import 'package:gtd_app/presentation/widgets/task_is_focus_check_box.dart';
 import 'package:gtd_app/presentation/widgets/task_title.dart';
 import 'package:provider/provider.dart';
 import 'package:gtd_app/presentation/providers/task_form_provider.dart';
@@ -72,7 +73,15 @@ class _TaskDetailsPageState extends State<TaskDetailsPage> {
                     setIsLoading: _setIsLoading),
                 const SizedBox(height: 16.0),
                 const Text('Task is done'),
-                TaskIsDoneCheckBox(value: taskFormProvider.isDone, task: task),
+                TaskIsDoneCheckBox(
+                  value: taskFormProvider.isDone,
+                  task: task,
+                ),
+                const Text('Task is focus'),
+                TaskIsFocusCheckBox(
+                  value: taskFormProvider.isFocus,
+                  task: task,
+                ),
               ],
             ),
           ),
