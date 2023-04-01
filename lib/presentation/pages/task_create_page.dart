@@ -72,17 +72,21 @@ class _TaskCreatePageState extends State<TaskCreatePage> {
               const SizedBox(height: 16.0),
               const Text('Task is done'),
               TaskIsDoneCheckBox(
-                  value: taskFormProvider.isDone,
-                  task: Task(
-                      title: taskFormProvider.title ?? '',
-                      isDone: taskFormProvider.isDone,
-                      id: null)),
+                value: taskFormProvider.isDone,
+                task: Task(
+                    title: taskFormProvider.title ?? '',
+                    isDone: taskFormProvider.isDone,
+                    id: null),
+                setIsLoading: _setIsLoading,
+              ),
               TaskIsFocusCheckBox(
-                  value: taskFormProvider.isDone,
-                  task: Task(
-                      title: taskFormProvider.title ?? '',
-                      isDone: taskFormProvider.isFocus,
-                      id: null)),
+                value: taskFormProvider.isDone,
+                task: Task(
+                    title: taskFormProvider.title ?? '',
+                    isDone: taskFormProvider.isFocus,
+                    id: null),
+                setIsLoading: _setIsLoading,
+              ),
             ],
           ),
         ),

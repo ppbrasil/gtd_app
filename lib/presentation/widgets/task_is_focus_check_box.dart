@@ -6,9 +6,13 @@ import 'package:gtd_app/presentation/providers/task_form_provider.dart';
 class TaskIsFocusCheckBox extends StatefulWidget {
   final bool value;
   final Task task;
+  final Function(bool) setIsLoading;
 
   const TaskIsFocusCheckBox(
-      {super.key, required this.value, required this.task});
+      {super.key,
+      required this.value,
+      required this.task,
+      required this.setIsLoading});
 
   @override
   State<TaskIsFocusCheckBox> createState() => _TaskIsDoneCheckBoxState();
@@ -30,7 +34,9 @@ class _TaskIsDoneCheckBoxState extends State<TaskIsFocusCheckBox> {
       });
       final taskFormProvider =
           Provider.of<TaskFormProvider>(context, listen: false);
+      widget.setIsLoading(true);
       taskFormProvider.updateIsFocus(newValue, widget.task);
+      widget.setIsLoading(false);
     }
   }
 

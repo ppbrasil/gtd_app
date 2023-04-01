@@ -22,7 +22,7 @@ class TaskItem extends StatelessWidget {
             }
           },
         ),
-        title: Text(task.title),
+        title: Text(task.title ?? ''),
         onTap: () {
           Navigator.pushNamed(
             context,
